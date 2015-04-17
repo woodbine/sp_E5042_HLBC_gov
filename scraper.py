@@ -37,7 +37,7 @@ for pageLink in pageLinks:
 	  	
 		for fileBlock in fileBlocks:
 		  	fileUrl = fileBlock['href']
-		  	if 'invoices_over_500' in fileUrl:
+		  	if '.csv' in fileUrl:
 			  	fileUrl = "http://www.hounslow.gov.uk/"+fileUrl
 			  	title = fileBlock.contents[0]
 				# create the right strings for the new filename
