@@ -28,6 +28,7 @@ pageLinks = soup.findAll('a', href=True)
 for pageLink in pageLinks:
 	href = pageLink['href']
 	if '/payments_to_supplier' in href:
+		print href
 	  	html2 = urllib2.urlopen(href)
 	  	soup2 = BeautifulSoup(html2)
 	  	
