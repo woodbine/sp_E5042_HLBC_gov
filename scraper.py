@@ -23,7 +23,8 @@ html = urllib2.urlopen(url)
 soup = BeautifulSoup(html)
 
 # find all entries with the required class
-pageLinks = soup.findAll('a', href=True)
+menuBlock = soup.find('ul',{'id':'leftnav'}) # Use the left hand nav for the page links
+pageLinks = menuBlock.findAll('a', href=True)
 
 for pageLink in pageLinks:
 	href = pageLink['href']
