@@ -26,25 +26,25 @@ soup = BeautifulSoup(html)
 pageLinks = soup.findAll('a', href=True)
 
 for pageLink in pageLinks:
-  href = pageLink['href']
-  if '/payments_to_supplier' in href:
-  	html2 = urllib2.urlopen(pageUrl)
-  	soup2 = BeautifulSoup(html2)
-  	
-  	fileBlocks = soup2.findAll('a', href=True)
-  	
-	for fileBlock in fileBlocks:
-	  	fileUrl = fileBlock['href']
-	  	if 'invoices_over_500' in fileUrl:
-		  	fileUrl = "http://www.hounslow.gov.uk/"+fileUrl
-		  	title = fileBlock.contents[0]
-			# create the right strings for the new filename
-			title = title.upper().strip()
-			csvYr = title.split(' ')[1]
-			csvMth = title.split(' ')[0][:3]
-			csvMth = convert_mth_strings(csvMth);
-		
-			filename = entity_id + "_" + csvYr + "_" + csvMth
-			todays_date = str(datetime.now())
-			scraperwiki.sqlite.save(unique_keys=['l'], data={"l": fileUrl, "f": filename, "d": todays_date })
-			print filename
+	href = pageLink['href']
+	if '/payments_to_supplier' in href:
+	  	html2 = urllib2.urlopen(pageUrl)
+	  	soup2 = BeautifulSoup(html2)
+	  	
+	  	fileBlocks = soup2.findAll('a', href=True)
+	  	
+		for fileBlock in fileBlocks:
+		  	fileUrl = fileBlock['href']
+		  	if 'invoices_over_500' in fileUrl:
+			  	fileUrl = "http://www.hounslow.gov.uk/"+fileUrl
+			  	title = fileBlock.contents[0]
+				# create the right strings for the new filename
+				title = title.upper().strip()
+				csvYr = title.split(' ')[1]
+				csvMth = title.split(' ')[0][:3]
+				csvMth = convert_mth_strings(csvMth);
+			
+				filename = entity_id + "_" + csvYr + "_" + csvMth
+				todays_date = str(datetime.now())
+				scraperwiki.sqlite.save(unique_keys=['l'], data={"l": fileUrl, "f": filename, "d": todays_date })
+				print filename
