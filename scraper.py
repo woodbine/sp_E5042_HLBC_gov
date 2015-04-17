@@ -28,7 +28,7 @@ pageLinks = soup.findAll('a', href=True)
 for pageLink in pageLinks:
 	href = pageLink['href']
 	if '/payments_to_supplier' in href:
-	  	html2 = urllib2.urlopen(pageUrl)
+	  	html2 = urllib2.urlopen(href)
 	  	soup2 = BeautifulSoup(html2)
 	  	
 	  	fileBlocks = soup2.findAll('a', href=True)
