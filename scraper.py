@@ -98,21 +98,19 @@ html = urllib2.urlopen(url)
 soup = BeautifulSoup(html, 'lxml')
 
 #### SCRAPE DATA
-import itertools
 
-for pages in itertools.count(1):
+
+for pages in range(1, 5):
     n=str(pages)
     html = urllib2.urlopen(url.format(n))
     soup = BeautifulSoup(html, 'lxml')
-
     pageLinks = soup.findAll('a', href=True)
-    more = soup.find('tfoot').find_all('a')[-1].text
-
+    more = soup.find('tfoot').find_all('a')[-2].text
     for pageLink in pageLinks:
         href = pageLink['href']
         if 'CSV' in href:
             fileUrl = "http://data.hounslow.gov.uk"+href
-            title = pageLink['title'].split('500')[-1].strip()
+            title = pageLink['title'].split('500')[-1].strip().replace('_', '').strip()
             csvYr = title.split(' ')[1]
             csvMth = title.split(' ')[0][:3]
             if '201' in csvMth:
@@ -124,11 +122,14 @@ for pages in itertools.count(1):
             if ' to March' in title:
                 csvMth = 'Q0'
                 csvYr = '2010'
+            if '20' not in csvYr and 'May' in title:
+                csvYr = '2017'
+            if 'September 16' in title:
+                csvYr = '2016'
             csvMth = convert_mth_strings(csvMth.upper())
             todays_date = str(datetime.now())
             data.append([csvYr, csvMth, fileUrl])
-    if '1' in more:
-        break
+
 
 #### STORE DATA 1.0
 
@@ -141,7 +142,7 @@ for row in data:
     valid = validate(filename, file_url)
 
     if valid == True:
-        scraperwiki.sqlite.save(unique_keys=['f'], data={"l": file_url, "f": filename, "d": todays_date })
+        scraperwiki.sqlite.save(unique_keys=['l'], data={"l": file_url, "f": filename, "d": todays_date })
         print filename
     else:
         errors += 1
